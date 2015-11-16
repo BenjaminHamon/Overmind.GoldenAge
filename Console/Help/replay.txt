@@ -1,0 +1,4 @@
+﻿Usage: replay MOD FILE INTERVAL
+
+Loads MOD and replays a game reading commands from FILE.
+Commands auto play every INTERNAL milliseconds.

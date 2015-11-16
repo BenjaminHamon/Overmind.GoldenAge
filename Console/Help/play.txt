@@ -1,0 +1,3 @@
+﻿Usage: play MOD
+
+Loads MOD and starts a game.

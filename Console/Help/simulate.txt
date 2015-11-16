@@ -1,0 +1,4 @@
+﻿Usage: simulate MOD FILE
+
+Loads MOD and simulates a game reading commands from FILE.
+The game plays in background.

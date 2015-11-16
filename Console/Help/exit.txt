@@ -1,0 +1,3 @@
+﻿Usage: exit
+
+Exits the application.

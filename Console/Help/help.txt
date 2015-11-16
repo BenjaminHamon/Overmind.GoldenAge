@@ -1,0 +1,4 @@
+﻿Usage: help [command]
+
+Displays the list of available commands.
+If a command argument is provided, displays the help for this command.
