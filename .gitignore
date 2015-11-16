@@ -1,0 +1,37 @@
+# Binaries
+*.exe
+*.dll
+
+# Debug symbols
+*.pdb
+
+# Visual studio user files
+*.csproj.user
+*.suo
+.vs/
+
+# Build directories
+*/bin/
+*/obj/
+
+# NuGet packages
+packages/
+
+# Unity3D
+Unity/Library
+Unity/Temp
+
+# Unity3D plugins
+*.dll.mdb
+*.dll.mdb.meta
+*.dll.meta
+*.pdb.meta
+
+!Unity/Assets/Plugins/Overmind.Unity.dll
+!Unity/Assets/Plugins/Overmind.Unity.dll.meta
+
+# UnityVS
+Unity/UnityVS.*.csproj
+Unity/UnityVS.*.sln
+Unity/Assets/UnityVS/
+Unity/Assets/UnityVS.meta
