@@ -15,6 +15,8 @@ namespace Overmind.GoldenAge.Unity
 		private MapView map;
 
 		[SerializeField]
+		private Text terrainText;
+		[SerializeField]
 		private Text ownerText;
 
 		public override void Start()
@@ -38,11 +40,13 @@ namespace Overmind.GoldenAge.Unity
 
 		private void UpdateInfo()
 		{
+			terrainText.text = currentTile.Terrain.Name;
 			ownerText.text = (currentTile.Owner != null) ? String.Format("Owned by " + currentTile.Owner.Name) : null;
 		}
 
 		private void ResetInfo()
 		{
+			terrainText.text = null;
 			ownerText.text = null;
 		}
 	}

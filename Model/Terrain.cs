@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Overmind.GoldenAge.Model
+﻿namespace Overmind.GoldenAge.Model
 {
 	public class Terrain
 	{
-		public Terrain(float textureOffset)
+		public Terrain(string name, float textureOffset)
 		{
+			this.Name = name;
 			this.TextureOffset = textureOffset;
 		}
 
+		public readonly string Name;
 		public readonly float TextureOffset;
 	}
 }

@@ -15,10 +15,12 @@ namespace Overmind.GoldenAge.Unity.Map
 	{
 		public void Initialize(Model.Map map)
 		{
-			if (map == null)
-				throw new ArgumentNullException("map");
+			//if (map == null)
+			//	throw new ArgumentNullException("map");
 
-			this.map = map;
+			//this.map = map;
+
+			BuildMap();
 		}
 
 		private Model.Map map;
@@ -43,26 +45,25 @@ namespace Overmind.GoldenAge.Unity.Map
 			{
 				IDictionary<string, Model.Terrain> terrainDictionary = new Dictionary<string, Model.Terrain>()
 				{
-					{ "sea", new Model.Terrain(0) },
-					{ "plain", new Model.Terrain(1) },
-					{ "mountain", new Model.Terrain(3) },
+					{ "sea", new Model.Terrain("Sea", 0) },
+					{ "plain", new Model.Terrain("Plain", 1) },
+					{ "mountain", new Model.Terrain("Moutain", 3) },
 				};
 
 				IList<MapTile> tileCollection = sourceImage.GetPixels32().Select(color => {
 					if (color == Color.blue) return new MapTile(terrainDictionary["sea"]);
 					if (color == Color.green) return new MapTile(terrainDictionary["plain"]);
 					if (color.Equals((Color32)Color.grey)) return new MapTile(terrainDictionary["mountain"]);
-					return new MapTile(new Model.Terrain(0));
+					return new MapTile(new Model.Terrain("NULL", 0));
 				}).ToList();
 
 				map = new Model.Map(sourceImage.width, sourceImage.height, tileCollection);
-				Debug.Log(String.Format("Map (Width: {0}, Height: {1}, TileCollection.Size: {2})", sourceImage.width, sourceImage.height, tileCollection.Count));
 			}
 			else
 			{
 				IList<MapTile> tileCollection = new List<MapTile>(100 * 100);
 				for (int i = 0; i < 100 * 100; i++)
-					tileCollection.Add(new MapTile(new Model.Terrain(0)));
+					tileCollection.Add(new MapTile(new Model.Terrain("NULL", 0)));
 				map = new Model.Map(100, 100, tileCollection);
 			}
 
