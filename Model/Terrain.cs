@@ -5,14 +5,13 @@ using System.Text;
 
 namespace Overmind.GoldenAge.Model
 {
-	public class MapTile
+	public class Terrain
 	{
-		public MapTile(Terrain terrain)
+		public Terrain(float textureOffset)
 		{
-			this.Terrain = terrain;
+			this.TextureOffset = textureOffset;
 		}
 
-		public readonly Terrain Terrain;
-		public Player Owner;
+		public readonly float TextureOffset;
 	}
 }

@@ -20,7 +20,7 @@ namespace Overmind.GoldenAge.Console
 
 		protected override void Initialize(IList<string> arguments)
 		{
-			game = new Game(new Map(10, 10));
+			game = new Game(10, 10);
 			game.AddPlayer(new Player(game, "You"));
 			gameView = new GameView(game, Output);
 			game.Start();

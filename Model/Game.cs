@@ -9,19 +9,18 @@ namespace Overmind.GoldenAge.Model
 	[DataContract]
 	public class Game : IDisposable
 	{
-		public Game()
+		public Game(int mapWidth, int mapHeight)
 		{
-			Map = new Map(100, 100);
+			IList<MapTile> tileCollection = new List<MapTile>(mapWidth * mapHeight);
+			for (int i = 0; i < mapWidth * mapHeight; i++)
+				tileCollection.Add(new MapTile(null));
+
+			Map = new Map(mapWidth, mapHeight, tileCollection);
 
 			Player player = new Player(this, "you");
 			player.ResourceCollection.Add(new Resource() { Name = Resource.Gold, Quantity = 100 });
 
 			AddPlayer(player);
-		}
-
-		public Game(Map map)
-		{
-			this.Map = map;
 		}
 
 		public readonly Map Map;

@@ -11,8 +11,8 @@ namespace Overmind.GoldenAge.Unity.Editor
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
-			if (GUILayout.Button("Generate"))
-				((MapView)target).GenerateMesh();
+			if (GUILayout.Button("Build"))
+				((MapView)target).BuildMap();
 		}
 	}
 }

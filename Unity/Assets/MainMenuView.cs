@@ -9,11 +9,6 @@ namespace Overmind.GoldenAge.Unity
 {
 	public class MainMenuView : MonoBehaviourBase
 	{
-		public override void Awake()
-		{
-			UnityApplication.Initialize();
-		}
-
 		[SerializeField]
 		private TextAsset ConfigurationFile;
 

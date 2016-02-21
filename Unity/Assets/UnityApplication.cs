@@ -1,18 +1,26 @@
 ﻿using Overmind.Core;
+using Overmind.Unity;
+using UnityEngine;
 
 namespace Overmind.GoldenAge.Unity
 {
-	public static class UnityApplication
+	/// <summary>
+	/// Global application object for Unity.
+	/// It should be included in any scene so that the application singleton is initialized.
+	/// The application singleton contains shared dependencies such as logging.
+	/// </summary>
+	/// <remarks>
+	/// The initialization does not work in edit mode after compiling.
+	/// See https://issuetracker.unity3d.com/issues/awake-and-start-not-called-before-update-when-assembly-is-reloaded-for-executeineditmode-scripts
+	/// </remarks>
+	[ExecuteInEditMode]
+	public class UnityApplication : MonoBehaviourBase
 	{
-		private static bool isInitialized = false;
-
-		public static void Initialize()
+		public override void Awake()
 		{
-			if (isInitialized == false)
-			{
-				ApplicationSingleton.Logger = new UnityLogger();
-				isInitialized = true;
-			}
+			ApplicationSingleton.Logger = new UnityLogger();
+
+			ApplicationSingleton.Logger.LogInfo("[UnityApplication] Application initialized");
 		}
 	}
 }

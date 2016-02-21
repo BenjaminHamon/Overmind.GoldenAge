@@ -12,17 +12,12 @@ namespace Overmind.GoldenAge.Unity
 {
 	public class GameView : MonoBehaviourBase
 	{
-		public override void Awake()
-		{
-			UnityApplication.Initialize();
-		}
-
 		private Game game;
 		private ContentLoader contentLoader;
 
 		public override void Start()
 		{
-			game = new Game();
+			game = new Game(100, 100);
 			map.Initialize(game.Map);
 
 			//foreach (Player player in game.PlayerCollection)

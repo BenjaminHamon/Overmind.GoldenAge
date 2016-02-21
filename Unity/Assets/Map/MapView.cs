@@ -1,7 +1,8 @@
-﻿using Overmind.Core;
-using Overmind.GoldenAge.Model;
+﻿using Overmind.GoldenAge.Model;
 using Overmind.Unity;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Overmind.GoldenAge.Unity.Map
@@ -21,6 +22,9 @@ namespace Overmind.GoldenAge.Unity.Map
 		}
 
 		private Model.Map map;
+
+		[SerializeField]
+		private Texture2D sourceImage;
 		
 		private new Transform transform;
 		private new Collider collider;
@@ -33,16 +37,40 @@ namespace Overmind.GoldenAge.Unity.Map
 			collider = GetComponent<MeshCollider>();
 		}
 
-		public void GenerateMesh()
+		public void BuildMap()
 		{
-			if (map == null)
+			if (sourceImage != null)
 			{
-				if (Application.isPlaying)
-					throw new OvermindException("[MapView.GenerateMesh] Map is not set");
-				else
-					map = new Model.Map(100, 100);
+				IDictionary<string, Model.Terrain> terrainDictionary = new Dictionary<string, Model.Terrain>()
+				{
+					{ "sea", new Model.Terrain(0) },
+					{ "plain", new Model.Terrain(1) },
+					{ "mountain", new Model.Terrain(3) },
+				};
+
+				IList<MapTile> tileCollection = sourceImage.GetPixels32().Select(color => {
+					if (color == Color.blue) return new MapTile(terrainDictionary["sea"]);
+					if (color == Color.green) return new MapTile(terrainDictionary["plain"]);
+					if (color.Equals((Color32)Color.grey)) return new MapTile(terrainDictionary["mountain"]);
+					return new MapTile(new Model.Terrain(0));
+				}).ToList();
+
+				map = new Model.Map(sourceImage.width, sourceImage.height, tileCollection);
+				Debug.Log(String.Format("Map (Width: {0}, Height: {1}, TileCollection.Size: {2})", sourceImage.width, sourceImage.height, tileCollection.Count));
+			}
+			else
+			{
+				IList<MapTile> tileCollection = new List<MapTile>(100 * 100);
+				for (int i = 0; i < 100 * 100; i++)
+					tileCollection.Add(new MapTile(new Model.Terrain(0)));
+				map = new Model.Map(100, 100, tileCollection);
 			}
 
+			BuildMesh();
+		}
+
+		private void BuildMesh()
+		{
 			Vector3[] vertices = new Vector3[map.Width * map.Height * 4];
 			int[] triangles = new int[map.Width * map.Height * 2 * 3];
 			Vector2[] uv = new Vector2[map.Width * map.Height * 4];
@@ -59,12 +87,12 @@ namespace Overmind.GoldenAge.Unity.Map
 					vertices[vertexOffset + 2] = new Vector3(x,     0, z + 1);
 					vertices[vertexOffset + 3] = new Vector3(x + 1, 0, z + 1);
 
-					float rand = UnityEngine.Random.Range(0, 4);
-					uv[vertexOffset + 0] = new Vector2(rand / 4, 0);
-					uv[vertexOffset + 1] = new Vector2((rand + 1) / 4, 0);
-					uv[vertexOffset + 2] = new Vector2(rand / 4, 1f);
-					uv[vertexOffset + 3] = new Vector2((rand + 1) / 4, 1f);
-					
+					MapTile tile = map.GetTile(x, z);
+					uv[vertexOffset + 0] = new Vector2(tile.Terrain.TextureOffset / 4, 0);
+					uv[vertexOffset + 1] = new Vector2((tile.Terrain.TextureOffset + 1) / 4, 0);
+					uv[vertexOffset + 2] = new Vector2(tile.Terrain.TextureOffset / 4, 1f);
+					uv[vertexOffset + 3] = new Vector2((tile.Terrain.TextureOffset + 1) / 4, 1f);
+
 					int triangleOffset = tileOffset * 6;
 
 					triangles[triangleOffset + 0] = vertexOffset;

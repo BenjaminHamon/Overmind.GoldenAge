@@ -5,17 +5,11 @@ namespace Overmind.GoldenAge.Model
 {
 	public class Map
 	{
-		public Map(int width, int height)
+		public Map(int width, int height, IList<MapTile> tileCollection)
 		{
 			this.Width = width;
 			this.Height = height;
-
-			tileCollection = new List<MapTile>(Width * Height);
-
-			for (int i = 0; i < Width * Height; i++)
-			{
-				tileCollection.Add(new MapTile());
-			}
+			this.tileCollection = tileCollection;
 		}
 
 		public readonly int Width;
