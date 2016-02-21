@@ -25,14 +25,14 @@ namespace Overmind.GoldenAge.Unity
 			game = new Game();
 			map.Initialize(game.Map);
 
-			foreach (Player player in game.PlayerCollection)
-			{
-				PlayerView playerView = Instantiate(PlayerViewPrefab).GetComponent<PlayerView>();
-				playerView.gameObject.SetActive(false);
-				playerView.Initialize(player, map);
-				playerView.transform.SetParent(PlayerViewGroup, false);
-				playerViewCollection.Add(playerView);
-			}
+			//foreach (Player player in game.PlayerCollection)
+			//{
+			//	PlayerView playerView = Instantiate(PlayerViewPrefab).GetComponent<PlayerView>();
+			//	playerView.gameObject.SetActive(false);
+			//	playerView.Initialize(player, map);
+			//	playerView.transform.SetParent(PlayerViewGroup, false);
+			//	playerViewCollection.Add(playerView);
+			//}
 
 			game.TurnStarted += OnTurnStarted;
 			game.Start();
@@ -57,13 +57,9 @@ namespace Overmind.GoldenAge.Unity
 		private void DoStart()
 		{
 		}
-
-		private readonly IList<PlayerView> playerViewCollection = new List<PlayerView>();
-		private PlayerView activePlayerView;
+		
 		[SerializeField]
-		private Transform PlayerViewGroup;
-		[SerializeField]
-		private GameObject PlayerViewPrefab;
+		private PlayerView playerView;
 
 		private void CreateEntityView(Player player, Entity entity)
 		{
@@ -76,47 +72,13 @@ namespace Overmind.GoldenAge.Unity
 		private MapView map;
 
 		[SerializeField]
-		private GridLayoutGroup Grid;
-		[SerializeField]
-		private GameObject CellPrefab;
-		[SerializeField]
-		private GameObject EntityPrefab;
-
-		[SerializeField, HideInInspector]
-		private int boardSize = 10;
-
-		[ExposeProperty]
-		public int BoardSize
-		{
-			get { return boardSize; }
-			set
-			{
-				if ((value <= 0) || (boardSize == value))
-					return;
-				boardSize = value;
-				RectTransform transform = (RectTransform)Grid.transform;
-				Grid.cellSize = new Vector2(transform.rect.width / boardSize, transform.rect.height / boardSize);
-				Grid.constraintCount = boardSize;
-			}
-		}
-
-		[SerializeField]
 		private Text TurnText;
 		[SerializeField]
 		private EntityInfoView EntityInfo;
 
 		private void OnTurnStarted(Game sender)
 		{
-			if (activePlayerView != null)
-				activePlayerView.gameObject.SetActive(false);
-
-			activePlayerView = playerViewCollection.First(playerView => playerView.Player == game.ActivePlayer);
-			activePlayerView.gameObject.SetActive(true);
-		}
-
-		private void OnSelectionChanged(Selection<EntityView> sender)
-		{
-			EntityInfo.SetEntity(sender.Item, activePlayerView);
+			playerView.SetPlayer(game.ActivePlayer);
 		}
 	}
 }

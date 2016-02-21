@@ -21,7 +21,7 @@ namespace Overmind.GoldenAge.Model
 		public string Name { get { return name; } }
 		public int Score { get; protected set; }
 
-		public IDictionary<string, int> ResourceCollection;
+		public IList<Resource> ResourceCollection = new List<Resource>();
 
 		public IStrategy Strategy { get; set; }
 		public IEnumerable<ICommand> CommandCollection;

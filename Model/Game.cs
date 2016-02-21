@@ -12,7 +12,11 @@ namespace Overmind.GoldenAge.Model
 		public Game()
 		{
 			Map = new Map(100, 100);
-			AddPlayer(new Player(this, "You"));
+
+			Player player = new Player(this, "you");
+			player.ResourceCollection.Add(new Resource() { Name = Resource.Gold, Quantity = 100 });
+
+			AddPlayer(player);
 		}
 
 		public Game(Map map)
