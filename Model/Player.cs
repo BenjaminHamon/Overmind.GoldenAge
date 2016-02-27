@@ -1,4 +1,5 @@
 ﻿using Overmind.Core;
+using Overmind.GoldenAge.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

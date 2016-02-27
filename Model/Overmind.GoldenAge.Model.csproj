@@ -53,10 +53,11 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\City.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="IStrategy.cs" />
-    <Compile Include="Entity.cs" />
+    <Compile Include="Entities\Entity.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="MapTile.cs" />
     <Compile Include="Player.cs" />

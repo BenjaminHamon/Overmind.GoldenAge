@@ -1,4 +1,5 @@
 ﻿using Overmind.Core;
+using Overmind.GoldenAge.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,17 @@ namespace Overmind.GoldenAge.Model
 			player.ResourceCollection.Add(new Resource() { Name = Resource.Gold, Quantity = 100 });
 
 			AddPlayer(player);
+
+			CityCollection = new List<City>()
+			{
+				new City() { Name = "Amagi", Position = new Vector(30, 10) },
+				new City() { Name = "Shirayuki", Position = new Vector(32, 15) },
+				new City() { Name = "Kongo", Position = new Vector(35, 9) },
+			};
 		}
 
 		public readonly Map Map;
+		public readonly IList<City> CityCollection;
 
 		public void Start()
 		{
@@ -42,18 +51,18 @@ namespace Overmind.GoldenAge.Model
 		public IEnumerable<Player> PlayerCollection { get { return playerCollection.AsReadOnly(); } }
 		public Player ActivePlayer { get; private set; }
 
-		public TEntity FindEntity<TEntity>(Vector position)
-			where TEntity : Entity
-		{
-			foreach (Player player in PlayerCollection)
-			{
-				TEntity entity = player.FindEntity<TEntity>(position);
-				if (entity != null)
-					return entity;
-			}
+		//public TEntity FindEntity<TEntity>(Vector position)
+		//	where TEntity : Entity
+		//{
+		//	foreach (Player player in PlayerCollection)
+		//	{
+		//		TEntity entity = player.FindEntity<TEntity>(position);
+		//		if (entity != null)
+		//			return entity;
+		//	}
 
-			return null;
-		}
+		//	return null;
+		//}
 
 		public IEnumerable<Entity> AllEntities
 		{
