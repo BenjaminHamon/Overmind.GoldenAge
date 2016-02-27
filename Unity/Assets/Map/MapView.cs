@@ -26,6 +26,9 @@ namespace Overmind.GoldenAge.Unity.Map
 		private Model.Map map;
 
 		[SerializeField]
+		private GameView game;
+
+		[SerializeField]
 		private Texture2D sourceImage;
 		
 		private new Transform transform;
@@ -37,6 +40,11 @@ namespace Overmind.GoldenAge.Unity.Map
 		{
 			transform = base.transform;
 			collider = GetComponent<MeshCollider>();
+		}
+
+		public void OnMouseDown()
+		{
+			game.EntityInfo.Entity = null;
 		}
 
 		public void BuildMap()
@@ -53,7 +61,7 @@ namespace Overmind.GoldenAge.Unity.Map
 				IList<MapTile> tileCollection = sourceImage.GetPixels32().Select(color => {
 					if (color == Color.blue) return new MapTile(terrainDictionary["sea"]);
 					if (color == Color.green) return new MapTile(terrainDictionary["plain"]);
-					if (color.Equals((Color32)Color.grey)) return new MapTile(terrainDictionary["mountain"]);
+					if (color.Equals((Color32)Color.gray)) return new MapTile(terrainDictionary["mountain"]);
 					return new MapTile(new Model.Terrain("NULL", 0));
 				}).ToList();
 

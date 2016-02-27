@@ -1,5 +1,7 @@
 ﻿using Overmind.Core;
 using Overmind.GoldenAge.Model;
+using Overmind.GoldenAge.Model.Entities;
+using Overmind.GoldenAge.Unity.Entities;
 using Overmind.GoldenAge.Unity.Map;
 using Overmind.Unity;
 using System;
@@ -19,6 +21,14 @@ namespace Overmind.GoldenAge.Unity
 		{
 			game = new Game(100, 100);
 			map.Initialize(game.Map);
+
+			foreach (City city in game.CityCollection)
+			{
+				EntityView entityView = Instantiate(cityPrefab).GetComponent<EntityView>();
+				entityView.Initialize(this, city);
+				entityView.transform.SetParent(entityGroup, false);
+			}
+
 
 			//foreach (Player player in game.PlayerCollection)
 			//{
@@ -65,11 +75,16 @@ namespace Overmind.GoldenAge.Unity
 
 		[SerializeField]
 		private MapView map;
+		[SerializeField]
+		private Transform entityGroup;
 
 		[SerializeField]
 		private Text TurnText;
 		[SerializeField]
-		private EntityInfoView EntityInfo;
+		public EntityInfoView EntityInfo;
+
+		[SerializeField]
+		private GameObject cityPrefab;
 
 		private void OnTurnStarted(Game sender)
 		{
