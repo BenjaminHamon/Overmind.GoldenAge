@@ -17,11 +17,11 @@ namespace Overmind.GoldenAge.Console
 
 		protected override void Help(IList<string> arguments)
 		{
-			if (arguments.Any() == false)
+			if (arguments.Count == 1)
 				base.Help(arguments);
 			else
 			{
-				string command = arguments[0];
+				string command = arguments[1];
 				string helpFilePath = Path.Combine("Help", command + ".txt");
 
 				if (File.Exists(helpFilePath) == false)

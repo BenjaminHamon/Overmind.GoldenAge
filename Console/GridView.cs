@@ -17,8 +17,19 @@ namespace Overmind.GoldenAge.Console
 
 		private readonly TextWriter output;
 
-		public int Width;
-		public int Height;
+		public int GridWidth;
+		public int GridHeight;
+		public int DisplayWidth;
+		public int DisplayHeight;
+
+		/// <summary>Function to retrieve the items to display.</summary>
+		public Func<IEnumerable<TItem>> ItemSource;
+
+		/// <summary>Function to retrieve the item position in the grid.</summary>
+		public Func<TItem, IEnumerable<double>> PositionGetter;
+
+		/// <summary>Function to convert an item to a string representation which can be displayed in the grid.</summary>
+		public Func<TItem, string> Descriptor;
 
 		/// <summary>Action executed before an element is drawn.</summary>
 		public Action<TItem> PreWrite;
@@ -76,21 +87,20 @@ namespace Overmind.GoldenAge.Console
 		//	Draw((int)left, (int)right, (int)bottom, (int)top, itemCollection, positionGetter, descriptor);
 		//}
 
-		public void Draw(IReadOnlyList<double> origin,
-			IEnumerable<TItem> itemCollection, Func<TItem, IEnumerable<double>> positionGetter, Func<TItem, string> descriptor)
+		public void Draw(IReadOnlyList<double> origin)
 		{
-			//string rowCompleteSeparator = CreateCompleteRowSeparator();
-
-
-
-			Draw(origin[0], Width / (CellSize + 1 /* Separator */) - 1 - (DrawAxis ? 1 : 0),
-				origin[1], Height / (1 /* Cell height */ + 1 /* Separator */) - 1 - (DrawAxis ? 1 : 0),
-				itemCollection, positionGetter, descriptor);
+			Draw(origin[0], DisplayWidth / (CellSize + 1 /* Separator */) - 1 - (DrawAxis ? 1 : 0),
+				origin[1], DisplayHeight / (1 /* Cell height */ + 1 /* Separator */) - 1 - (DrawAxis ? 1 : 0));
 		}
 
-		public void Draw(double columnMin, double columnMax, double rowMin, double rowMax,
-			IEnumerable<TItem> itemCollection, Func<TItem, IEnumerable<double>> positionGetter, Func<TItem, string> descriptor)
+		public void Draw(double columnMin, double columnMax, double rowMin, double rowMax)
 		{
+			IEnumerable<TItem> itemCollection = ItemSource();
+			columnMin = Math.Max(columnMin, 0);
+			columnMax = Math.Min(columnMax, GridHeight - 1);
+			rowMin = Math.Max(rowMin, 0);
+			rowMax = Math.Min(rowMax, GridWidth - 1);
+
 			//string rowCompleteSeparator = CreateCompleteRowSeparator();
 			string rowCompleteSeparator = new String(RowSeparator, (CellSize + 1 /* Separator */)
 				* ((int)Math.Floor((columnMax - columnMin) / Step) + (DrawAxis ? 1 : 0)) + CellSize);
@@ -108,9 +118,9 @@ namespace Overmind.GoldenAge.Console
 					if (columnIndex != columnMin)
 						output.Write(ColumnSeparator);
 					double[] position = { columnIndex, rowIndex };
-					TItem item = itemCollection.FirstOrDefault(x => positionGetter(x).SequenceEqual(position));
+					TItem item = itemCollection.FirstOrDefault(x => PositionGetter(x).SequenceEqual(position));
 					if (EqualityComparer<TItem>.Default.Equals(item, default(TItem)) == false)
-						DrawItem(item, descriptor);
+						DrawItem(item);
 					else
 						output.Write(Pad(""));
 				}
@@ -134,11 +144,11 @@ namespace Overmind.GoldenAge.Console
 			}
 		}
 
-		private void DrawItem(TItem item, Func<TItem, string> descriptor)
+		private void DrawItem(TItem item)
 		{
 			if (PreWrite != null)
 				PreWrite(item);
-			output.Write(Pad(descriptor(item)));
+			output.Write(Pad(Descriptor(item)));
 			if (PostWrite != null)
 				PostWrite(item);
 		}

@@ -1,5 +1,6 @@
 ﻿using Overmind.Core;
 using Overmind.GoldenAge.Model;
+using Overmind.GoldenAge.Model.Entities;
 using System;
 using System.IO;
 
@@ -17,12 +18,22 @@ namespace Overmind.GoldenAge.Console
 
 			this.game = game;
 			this.output = output;
-			
-			grid = new GridView<Entity>(output);
+
+			grid = new GridView<Entity>(output)
+			{
+				Descriptor = entity => entity.Symbol,
+				PositionGetter = entity => entity.Position,
+				ItemSource = () => game.AllEntities,
+				GridWidth = game.Map.Width,
+				GridHeight = game.Map.Height,
+				DisplayWidth = 10,
+				DisplayHeight = 10,
+			};
+
 			if (output == System.Console.Out)
 			{
-				grid.PreWrite = entity => System.Console.ForegroundColor = entity.Owner.Color.Value.ToConsoleColor();
-				grid.PostWrite = entity => System.Console.ResetColor();
+				//grid.PreWrite = entity => System.Console.ForegroundColor = entity.Owner.Color.Value.ToConsoleColor();
+				//grid.PostWrite = entity => System.Console.ResetColor();
 			}
 
 			game.TurnStarted += _ => Draw();
@@ -37,14 +48,16 @@ namespace Overmind.GoldenAge.Console
 		private void Draw()
 		{
 			if (output == System.Console.Out)
+			{
 				System.Console.Clear();
 
-			grid.Width = System.Console.WindowWidth;
-			grid.Height = System.Console.WindowHeight - 5;
+				grid.DisplayWidth = System.Console.WindowWidth;
+				grid.DisplayHeight = System.Console.WindowHeight - 5;
+			}
 
 			output.WriteLine();
 
-			grid.Draw(LookAt, game.AllEntities, p => p.Position, p => p.ToShortString());
+			grid.Draw(LookAt);
 			//grid.Draw(1, game.BoardSize, 1, game.BoardSize, game.AllEntities, p => p.Position, p => p.ToShortString());
 
 			output.WriteLine();

@@ -1,5 +1,6 @@
 ﻿using Overmind.Core;
 using Overmind.GoldenAge.Model;
+using Overmind.GoldenAge.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -28,17 +29,17 @@ namespace Overmind.GoldenAge.Console
 
 		private void Play()
 		{
-			Vector source = ReadVector("Source");
-			Entity entity = game.ActivePlayer.FindEntity<Entity>(source);
-			if (entity == null)
-				throw new Exception("No entity found");
+			//Vector source = ReadVector("Source");
+			//Entity entity = game.ActivePlayer.FindEntity<Entity>(source);
+			//if (entity == null)
+			//	throw new Exception("No entity found");
 
-			string commandName = Read("Command");
-			ICommand command = entity.CommandCollection.First(c => c.Name == commandName);
+			//string commandName = Read("Command");
+			//ICommand command = entity.CommandCollection.First(c => c.Name == commandName);
 
-			Vector destination = ReadVector("Destination");
-			command.Execute(destination);
-			game.ActivePlayer.EndTurn();
+			//Vector destination = ReadVector("Destination");
+			//command.Execute(destination);
+			//game.ActivePlayer.EndTurn();
 		}
 
 		private Vector ReadVector(string message)
